@@ -1,63 +1,92 @@
 package SeccionB;
 import static org.junit.Assert.assertEquals;
+
+import java.time.LocalDate;
+
 import org.junit.Test;
 public class ETest {
 	@Test
-	public void testCsWorkerInOddMonthUSD() {
-		// Escenario: Trabajador en mes impar con moneda USD
-        Employee employee = new Employee(1000.0f, "USD", 0.0f, EmployeeType.Worker);
+    public void testCsWorkerInOddMonthUSD() {
+        // Mock de la fecha actual (mes impar)
+        LocalDate mockedDate = LocalDate.of(2025, 1, 1);  // Fecha de enero (mes impar)
+
+        // Crear el objeto Employee con los datos correspondientes
+        Employee employee = new Employee(1000.0f, "USD", 0.0f, EmployeeType.Worker, mockedDate);
+
+        // Calcular el salario esperado (con el décimo por mes impar)
         float expected = 1000.0f + (386.0f / 12 * 2);
         assertEquals(expected, employee.cs(), 0.01);
-	}
-	
-	
-	@Test
+    }
+
+    @Test
     public void testCsWorkerInEvenMonthNonUSD() {
-        // Escenario: Trabajador en mes par con moneda no USD
-        Employee employee = new Employee(1000.0f, "EUR", 0.0f, EmployeeType.Worker);
+        // Mock de la fecha actual (mes par)
+        LocalDate mockedDate = LocalDate.of(2025, 2, 1);  // Fecha de febrero (mes par)
+
+        // Crear el objeto Employee con los datos correspondientes
+        Employee employee = new Employee(1000.0f, "EUR", 0.0f, EmployeeType.Worker, mockedDate);
+
+        // Calcular el salario esperado (sin el décimo)
         float expected = 1000.0f * 0.95f;
         assertEquals(expected, employee.cs(), 0.01);
     }
-	
-	@Test
+
+    @Test
     public void testCsSupervisorInOddMonthWithBonus() {
-        // Escenario: Supervisor en mes impar con bono
-        Employee employee = new Employee(1500.0f, "USD", 0.1f, EmployeeType.Supervisor);
+        // Mock de la fecha actual (mes impar)
+        LocalDate mockedDate = LocalDate.of(2025, 1, 1);  // Fecha de enero (mes impar)
+
+        // Crear el objeto Employee con los datos correspondientes
+        Employee employee = new Employee(1500.0f, "USD", 0.1f, EmployeeType.Supervisor, mockedDate);
+
+        // Calcular el bono
         float bonus = 0.1f * 0.35f;
+        // Calcular el salario esperado (con el décimo por mes impar)
         float expected = 1500.0f + bonus + (386.0f / 12 * 2);
         assertEquals(expected, employee.cs(), 0.01);
     }
-	
-	@Test
+
+    @Test
     public void testCsManagerInEvenMonthNonUSD() {
-        // Escenario: Gerente en mes par con moneda no USD
-        Employee employee = new Employee(2000.0f, "GBP", 0.2f, EmployeeType.Manager);
+        // Mock de la fecha actual (mes par)
+        LocalDate mockedDate = LocalDate.of(2025, 2, 1);  // Fecha de febrero (mes par)
+
+        // Crear el objeto Employee con los datos correspondientes
+        Employee employee = new Employee(2000.0f, "GBP", 0.2f, EmployeeType.Manager, mockedDate);
+
+        // Calcular el salario esperado (sin el décimo por mes par)
         float salaryAfterCurrencyAdjustment = 2000.0f * 0.95f;
         float bonus = 0.2f * 0.7f;
         float expected = salaryAfterCurrencyAdjustment + bonus;
         assertEquals(expected, employee.cs(), 0.01);
     }
-	
-	@Test
+
+    @Test
     public void testCalculateYearBonusWorker() {
-        // Escenario: Bono anual para un trabajador
-        Employee employee = new Employee(1200.0f, "USD", 0.0f, EmployeeType.Worker);
+        // Crear el objeto Employee con los datos correspondientes
+        Employee employee = new Employee(1200.0f, "USD", 0.0f, EmployeeType.Worker, LocalDate.now());
+
+        // Verificar que el bono de fin de año sea correcto
         assertEquals(386.0f, employee.CalculateYearBonus(), 0.01);
     }
-	
-	@Test
+
+    @Test
     public void testCalculateYearBonusSupervisorNonUSD() {
-        // Escenario: Bono anual para un supervisor con moneda no USD
-        Employee employee = new Employee(1800.0f, "JPY", 0.0f, EmployeeType.Supervisor);
+        // Crear el objeto Employee con los datos correspondientes
+        Employee employee = new Employee(1800.0f, "JPY", 0.0f, EmployeeType.Supervisor, LocalDate.now());
+
+        // Calcular el salario esperado con ajuste de moneda
         float salaryAfterCurrencyAdjustment = 1800.0f * 0.95f;
         float expected = salaryAfterCurrencyAdjustment + (386.0f * 0.5f);
         assertEquals(expected, employee.CalculateYearBonus(), 0.01);
     }
-	
-	@Test
+
+    @Test
     public void testCalculateYearBonusManager() {
-        // Escenario: Bono anual para un gerente
-        Employee employee = new Employee(2500.0f, "USD", 0.0f, EmployeeType.Manager);
+        // Crear el objeto Employee con los datos correspondientes
+        Employee employee = new Employee(2500.0f, "USD", 0.0f, EmployeeType.Manager, LocalDate.now());
+
+        // Calcular el bono de fin de año
         float expected = 2500.0f + 386.0f;
         assertEquals(expected, employee.CalculateYearBonus(), 0.01);
     }
