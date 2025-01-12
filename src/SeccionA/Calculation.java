@@ -1,4 +1,4 @@
-package modelo;
+package SeccionA;
 
 public class Calculation {
 	//Corección
